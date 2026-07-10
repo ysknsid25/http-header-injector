@@ -10,6 +10,7 @@ A Chrome extension for developers that lets you inject custom HTTP **request** h
 - Enable / disable each header individually
 - Optional URL filter to limit where headers are applied
 - An explicit **Save** button — nothing is applied until you save
+- Export / import your settings as a JSON file
 - Settings are stored only in your browser (`chrome.storage.local`) — no communication with any external server
 
 ## Why request headers only?
@@ -29,6 +30,8 @@ Header modification is implemented with the Manifest V3 [`declarativeNetRequest`
 3. Use the checkbox on the left of each row to enable / disable that header.
 4. Optionally, enter text in the "URL filter" field to apply headers only to requests whose URL contains that text (leave it empty to target all URLs).
 5. Click **Save** to apply your changes.
+
+Use **Export** to download your current settings as a JSON file, and **Import** to load settings from a JSON file. Imported settings are staged in the popup — review them and click **Save** to apply.
 
 ## Examples
 
