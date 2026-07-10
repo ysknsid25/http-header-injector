@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "HTTP Header Injector",
     "version": "0.0.1",
-    "description": "A developer tool to add, modify, and remove HTTP request/response headers. A free, lightweight alternative to ModHeader.",
+    "description": "Add custom HTTP request headers in Chrome. A free, lightweight, open-source alternative to ModHeader.",
     "permissions": ["declarativeNetRequest", "storage"],
     "host_permissions": ["<all_urls>"],
     "background": {
