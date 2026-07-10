@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "HTTP Header Injector",
+    "version": "0.0.1",
+    "description": "A developer tool to add, modify, and remove HTTP request/response headers. A free, lightweight alternative to ModHeader.",
+    "permissions": ["declarativeNetRequest", "storage"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_title": "HTTP Header Injector (modify HTTP headers)",
+        "default_popup": "src/popup.html",
+        "default_icon": {
+            "16": "icons/icon16.png",
+            "48": "icons/icon48.png",
+            "128": "icons/icon128.png"
+        }
+    },
+    "icons": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+    }
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HTTP Header Injector</title>
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+    <body>
+        <header class="app-header">
+            <div class="app-title">
+                <img src="./assets/img/icon32.png" alt="HTTP Header Injector" />
+                <h1>HTTP Header Injector</h1>
+            </div>
+        </header>
+
+        <section class="url-filter">
+            <label for="urlFilter">URL filter (optional)</label>
+            <input
+                type="text"
+                id="urlFilter"
+                placeholder="e.g. example.com (leave empty to apply to all URLs)"
+            />
+            <p class="hint">
+                Headers are added only to requests whose URL contains this text.
+            </p>
+        </section>
+
+        <section class="headers">
+            <div class="headers-head">
+                <h2>Request headers</h2>
+                <button id="addHeader" class="btn btn-ghost" type="button">
+                    + Add
+                </button>
+            </div>
+            <div id="headerList" class="header-list"></div>
+            <p id="emptyState" class="empty-state">
+                No headers yet. Click "+ Add" to create one.
+            </p>
+        </section>
+
+        <footer class="app-footer">
+            <span class="status" id="status">Saved</span>
+            <button id="save" class="btn btn-primary" type="button" disabled>
+                Save
+            </button>
+        </footer>
+
+        <template id="headerRowTemplate">
+            <div class="header-row">
+                <label class="row-toggle" title="Enable / disable this header">
+                    <input type="checkbox" class="row-enabled" />
+                    <span class="check"></span>
+                </label>
+                <input type="text" class="row-name" placeholder="Header name" />
+                <input type="text" class="row-value" placeholder="Value" />
+                <button
+                    class="row-remove btn-icon"
+                    type="button"
+                    title="Remove"
+                >
+                    ✕
+                </button>
+            </div>
+        </template>
+
+        <script src="popup.js"></script>
+    </body>
+</html>
