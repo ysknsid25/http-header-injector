@@ -6,6 +6,8 @@ A Chrome extension for developers that lets you inject custom HTTP **request** h
 
 # Features
 
+https://github.com/user-attachments/assets/8fc56a8d-d75b-44e4-b9be-e466dd623dc2
+
 - Add custom HTTP **request** headers to outgoing requests
 - Enable / disable each header individually
 - Optional URL filter to limit where headers are applied
