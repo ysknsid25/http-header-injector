@@ -25,11 +25,10 @@ Header modification is implemented with the Manifest V3 [`declarativeNetRequest`
 
 # Usage
 
-1. Click the ⇄ icon in the toolbar to open the popup.
-2. Click "+ Add" to add a header row, then fill in the **header name** and **value** (e.g. `Authorization` / `Bearer xxxxx`).
-3. Use the checkbox on the left of each row to enable / disable that header.
-4. Optionally, enter text in the "URL filter" field to apply headers only to requests whose URL contains that text (leave it empty to target all URLs).
-5. Click **Save** to apply your changes.
+1. Click "+ Add" to add a header row, then fill in the **header name** and **value** (e.g. `Authorization` / `Bearer xxxxx`).
+2. Use the checkbox on the left of each row to enable / disable that header.
+3. Optionally, enter text in the "URL filter" field to apply headers only to requests whose URL contains that text (leave it empty to target all URLs).
+4. Click **Save** to apply your changes.
 
 Use **Export** to download your current settings as a JSON file, and **Import** to load settings from a JSON file. Imported settings are staged in the popup — review them and click **Save** to apply.
 
@@ -45,7 +44,7 @@ Use **Export** to download your current settings as a JSON file, and **Import** 
 
 ## Chrome Web Store
 
-TBD
+Coming Soon...
 
 ## Development build
 
