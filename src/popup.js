@@ -21,6 +21,9 @@ const els = {
     save: document.getElementById("save"),
     status: document.getElementById("status"),
     template: document.getElementById("headerRowTemplate"),
+    exportBtn: document.getElementById("exportBtn"),
+    importBtn: document.getElementById("importBtn"),
+    importFile: document.getElementById("importFile"),
 };
 
 let config = defaultConfig();
@@ -158,6 +161,65 @@ els.add.addEventListener("click", () => {
     });
     render();
     setDirty(true);
+});
+
+function exportConfig() {
+    const data = {
+        version: 1,
+        urlFilter: config.urlFilter || "",
+        headers: config.headers.map((h) => ({
+            enabled: h.enabled !== false,
+            name: h.name,
+            value: h.value,
+        })),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "http-header-injector-config.json";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importConfig(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+        let data;
+        try {
+            data = JSON.parse(reader.result);
+        } catch {
+            els.save.disabled = true;
+            els.status.className = "status error";
+            els.status.textContent = "Import failed: invalid JSON";
+            return;
+        }
+        const headers = Array.isArray(data && data.headers) ? data.headers : [];
+        config = {
+            urlFilter: sanitize(String((data && data.urlFilter) ?? "")),
+            headers: headers
+                .map((h) => ({
+                    id: genId(),
+                    enabled: !(h && h.enabled === false),
+                    name: sanitize(String((h && h.name) ?? "")),
+                    value: sanitize(String((h && h.value) ?? "")),
+                }))
+                .filter((h) => h.name.trim() !== ""),
+        };
+        render();
+        setDirty(true);
+    };
+    reader.readAsText(file);
+}
+
+els.exportBtn.addEventListener("click", exportConfig);
+els.importBtn.addEventListener("click", () => els.importFile.click());
+els.importFile.addEventListener("change", () => {
+    const file = els.importFile.files[0];
+    if (file) importConfig(file);
+    els.importFile.value = "";
 });
 
 els.save.addEventListener("click", save);

@@ -29,10 +29,24 @@
         <section class="headers">
             <div class="headers-head">
                 <h2>Request headers</h2>
-                <button id="addHeader" class="btn btn-ghost" type="button">
-                    + Add
-                </button>
+                <div class="head-actions">
+                    <button id="importBtn" class="btn btn-ghost" type="button">
+                        Import
+                    </button>
+                    <button id="exportBtn" class="btn btn-ghost" type="button">
+                        Export
+                    </button>
+                    <button id="addHeader" class="btn btn-ghost" type="button">
+                        + Add
+                    </button>
+                </div>
             </div>
+            <input
+                id="importFile"
+                type="file"
+                accept="application/json,.json"
+                hidden
+            />
             <div id="headerList" class="header-list"></div>
             <p id="emptyState" class="empty-state">
                 No headers yet. Click "+ Add" to create one.

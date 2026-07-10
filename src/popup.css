@@ -103,6 +103,13 @@ body {
   font-size: 13px;
   font-weight: 700;
 }
+.head-actions {
+  display: flex;
+  gap: 6px;
+}
+.head-actions .btn-ghost {
+  padding: 5px 10px;
+}
 
 .header-list {
   display: flex;
