@@ -1,5 +1,8 @@
 const STORAGE_KEY = "config";
 
+// "ping" and "csp_report" are intentionally excluded: they are browser-generated
+// requests that may target third-party endpoints unknown to the user, and should
+// not carry user-configured credentials such as Authorization or X-API-Key headers.
 const RESOURCE_TYPES = [
     "main_frame",
     "sub_frame",
@@ -9,8 +12,6 @@ const RESOURCE_TYPES = [
     "font",
     "object",
     "xmlhttprequest",
-    "ping",
-    "csp_report",
     "media",
     "websocket",
     "other",
