@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F14E32"/>
+      <stop offset="1" stop-color="#D8401F"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect x="4" y="4" width="120" height="120" rx="26" fill="url(#bg)"/>
+
+  <!-- angle brackets: < > -->
+  <path d="M 46 32 L 26 64 L 46 96" fill="none" stroke="#F0EFE7" stroke-width="11"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 82 32 L 102 64 L 82 96" fill="none" stroke="#F0EFE7" stroke-width="11"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- injected drop, sits in the gap between brackets -->
+  <path d="M 64 66 C 70 74 70 82 64 86 C 58 82 58 74 64 66 Z" fill="#0388A6"/>
+
+  <!-- syringe, angled, tip meeting the drop -->
+  <g transform="rotate(38 64 64)">
+    <!-- plunger cap -->
+    <rect x="58.5" y="2" width="11" height="9" rx="2" fill="#4E443C"/>
+    <!-- plunger rod -->
+    <rect x="62.5" y="10" width="3" height="16" fill="#4E443C"/>
+    <!-- barrel -->
+    <rect x="53" y="25" width="22" height="34" rx="4" fill="#F0EFE7" stroke="#4E443C" stroke-width="3"/>
+    <!-- fluid in barrel -->
+    <rect x="55.5" y="42" width="17" height="15" rx="2" fill="#0388A6"/>
+    <!-- graduation marks -->
+    <rect x="53" y="31" width="7" height="2" fill="#4E443C"/>
+    <rect x="53" y="38" width="7" height="2" fill="#4E443C"/>
+    <!-- needle hub -->
+    <path d="M 57 59 L 71 59 L 66 68 L 62 68 Z" fill="#4E443C"/>
+    <!-- needle -->
+    <rect x="63" y="66" width="2" height="20" fill="#4E443C"/>
+  </g>
+</svg>
