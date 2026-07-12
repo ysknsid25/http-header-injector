@@ -14,6 +14,39 @@
             </div>
         </header>
 
+        <section class="profiles">
+            <label for="profileSelect">Profile</label>
+            <div class="profile-bar">
+                <select id="profileSelect" aria-label="Active profile"></select>
+                <button
+                    id="addProfile"
+                    class="btn-icon"
+                    type="button"
+                    title="New profile"
+                >
+                    +
+                </button>
+                <button
+                    id="deleteProfile"
+                    class="btn-icon"
+                    type="button"
+                    title="Delete profile"
+                >
+                    🗑
+                </button>
+            </div>
+            <input
+                id="profileName"
+                type="text"
+                placeholder="Profile name"
+                aria-label="Profile name"
+            />
+            <p class="hint">
+                Group headers by environment — e.g. prd, stg, local. Only the
+                selected profile is active.
+            </p>
+        </section>
+
         <section class="url-filter">
             <label for="urlFilter">URL filter (optional)</label>
             <input

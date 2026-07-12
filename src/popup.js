@@ -1,19 +1,94 @@
 const STORAGE_KEY = "config";
 
-const defaultConfig = () => ({
-    urlFilter: "",
-    headers: [],
-});
+function genId(prefix) {
+    return `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
+}
 
-function genId() {
-    return `h_${Math.random().toString(36).slice(2, 9)}`;
+function defaultProfile(name = "Default") {
+    return { id: genId("p"), name, urlFilter: "", headers: [] };
+}
+
+function defaultConfig() {
+    const p = defaultProfile();
+    return { activeProfileId: p.id, profiles: [p] };
 }
 
 function sanitize(str) {
     return str.replace(/[\r\n\x00]/g, "");
 }
 
+function normalizeHeader(h) {
+    return {
+        id: typeof h?.id === "string" ? h.id : genId("h"),
+        enabled: !(h && h.enabled === false),
+        name: typeof h?.name === "string" ? h.name : "",
+        value: typeof h?.value === "string" ? h.value : "",
+    };
+}
+
+function dedupeProfileNames(profiles) {
+    const seen = new Set();
+    for (const p of profiles) {
+        const base = p.name.trim() === "" ? "Default" : p.name;
+        let candidate = base;
+        let n = 2;
+        while (seen.has(candidate.trim().toLowerCase())) {
+            candidate = `${base} ${n}`;
+            n++;
+        }
+        p.name = candidate;
+        seen.add(candidate.trim().toLowerCase());
+    }
+    return profiles;
+}
+
+function migrate(raw) {
+    if (raw && typeof raw === "object" && Array.isArray(raw.profiles) && raw.profiles.length > 0) {
+        const profiles = dedupeProfileNames(
+            raw.profiles.map((p, i) => ({
+                id: typeof p?.id === "string" ? p.id : genId("p"),
+                name:
+                    typeof p?.name === "string" && p.name.trim() !== ""
+                        ? p.name
+                        : `Profile ${i + 1}`,
+                urlFilter: typeof p?.urlFilter === "string" ? p.urlFilter : "",
+                headers: Array.isArray(p?.headers) ? p.headers.map(normalizeHeader) : [],
+            })),
+        );
+        const activeProfileId = profiles.some((p) => p.id === raw.activeProfileId)
+            ? raw.activeProfileId
+            : profiles[0].id;
+        return { activeProfileId, profiles };
+    }
+    if (
+        raw &&
+        typeof raw === "object" &&
+        (Array.isArray(raw.headers) || typeof raw.urlFilter === "string")
+    ) {
+        const p = {
+            id: genId("p"),
+            name: "Default",
+            urlFilter: typeof raw.urlFilter === "string" ? raw.urlFilter : "",
+            headers: Array.isArray(raw.headers) ? raw.headers.map(normalizeHeader) : [],
+        };
+        return { activeProfileId: p.id, profiles: [p] };
+    }
+    return defaultConfig();
+}
+
+function uniqueProfileName(base) {
+    const existing = new Set(config.profiles.map((p) => p.name.trim().toLowerCase()));
+    if (!existing.has(base.trim().toLowerCase())) return base;
+    let n = 2;
+    while (existing.has(`${base} ${n}`.trim().toLowerCase())) n++;
+    return `${base} ${n}`;
+}
+
 const els = {
+    profileSelect: document.getElementById("profileSelect"),
+    profileName: document.getElementById("profileName"),
+    addProfile: document.getElementById("addProfile"),
+    deleteProfile: document.getElementById("deleteProfile"),
     urlFilter: document.getElementById("urlFilter"),
     list: document.getElementById("headerList"),
     empty: document.getElementById("emptyState"),
@@ -29,10 +104,13 @@ const els = {
 let config = defaultConfig();
 let dirty = false;
 
+function activeProfile() {
+    return config.profiles.find((p) => p.id === config.activeProfileId) || config.profiles[0];
+}
+
 async function load() {
     const data = await chrome.storage.local.get(STORAGE_KEY);
-    config = Object.assign(defaultConfig(), data[STORAGE_KEY] || {});
-    if (!Array.isArray(config.headers)) config.headers = [];
+    config = migrate(data[STORAGE_KEY]);
     render();
     setDirty(false);
 }
@@ -41,7 +119,7 @@ function validate() {
     const seen = new Map();
     const duplicates = new Set();
     const incomplete = new Set();
-    for (const h of config.headers) {
+    for (const h of activeProfile().headers) {
         const name = h.name.trim();
         if (name === "") {
             incomplete.add(h.id);
@@ -59,18 +137,51 @@ function validate() {
     return { duplicates, incomplete };
 }
 
-function update() {
-    const { duplicates, incomplete } = validate();
-    els.list.querySelectorAll(".header-row").forEach((row) => {
-        row.classList.toggle("duplicate", duplicates.has(row.dataset.id));
-        row.classList.toggle("invalid", incomplete.has(row.dataset.id));
-    });
+function validateProfiles() {
+    const seen = new Map();
+    const duplicates = new Set();
+    const incomplete = new Set();
+    for (const p of config.profiles) {
+        const name = p.name.trim();
+        if (name === "") {
+            incomplete.add(p.id);
+            continue;
+        }
+        const key = name.toLowerCase();
+        if (seen.has(key)) {
+            duplicates.add(p.id);
+            duplicates.add(seen.get(key));
+        } else {
+            seen.set(key, p.id);
+        }
+    }
+    return { duplicates, incomplete };
+}
 
-    if (duplicates.size > 0 || incomplete.size > 0) {
+function update() {
+    const header = validate();
+    const profile = validateProfiles();
+    const active = config.activeProfileId;
+
+    els.list.querySelectorAll(".header-row").forEach((row) => {
+        row.classList.toggle("duplicate", header.duplicates.has(row.dataset.id));
+        row.classList.toggle("invalid", header.incomplete.has(row.dataset.id));
+    });
+    els.profileName.classList.toggle(
+        "invalid",
+        profile.duplicates.has(active) || profile.incomplete.has(active),
+    );
+
+    let error = null;
+    if (profile.duplicates.size > 0) error = "Duplicate profile name";
+    else if (profile.incomplete.size > 0) error = "Profile name is required";
+    else if (header.duplicates.size > 0) error = "Duplicate header name";
+    else if (header.incomplete.size > 0) error = "Header name is required";
+
+    if (error) {
         els.save.disabled = true;
         els.status.className = "status error";
-        els.status.textContent =
-            duplicates.size > 0 ? "Duplicate header name" : "Header name is required";
+        els.status.textContent = error;
         return;
     }
 
@@ -85,19 +196,46 @@ function setDirty(value) {
 }
 
 async function save() {
-    const { duplicates, incomplete } = validate();
-    if (duplicates.size > 0 || incomplete.size > 0) return;
+    const header = validate();
+    const profile = validateProfiles();
+    if (
+        header.duplicates.size > 0 ||
+        header.incomplete.size > 0 ||
+        profile.duplicates.size > 0 ||
+        profile.incomplete.size > 0
+    ) {
+        return;
+    }
     await chrome.storage.local.set({ [STORAGE_KEY]: config });
     setDirty(false);
 }
 
+function profileLabel(name) {
+    return name.trim() === "" ? "Untitled" : name;
+}
+
+function renderProfiles() {
+    els.profileSelect.innerHTML = "";
+    for (const p of config.profiles) {
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = profileLabel(p.name);
+        els.profileSelect.appendChild(opt);
+    }
+    els.profileSelect.value = config.activeProfileId;
+    els.profileName.value = activeProfile().name;
+    els.deleteProfile.disabled = config.profiles.length <= 1;
+}
+
 function render() {
-    els.urlFilter.value = config.urlFilter || "";
+    const prof = activeProfile();
+    renderProfiles();
+    els.urlFilter.value = prof.urlFilter || "";
     els.list.innerHTML = "";
-    for (const h of config.headers) {
+    for (const h of prof.headers) {
         els.list.appendChild(renderRow(h));
     }
-    els.empty.classList.toggle("hidden", config.headers.length > 0);
+    els.empty.classList.toggle("hidden", prof.headers.length > 0);
 }
 
 function renderRow(h) {
@@ -136,7 +274,8 @@ function renderRow(h) {
     bindText(value, "value");
 
     remove.addEventListener("click", () => {
-        config.headers = config.headers.filter((x) => x.id !== h.id);
+        const prof = activeProfile();
+        prof.headers = prof.headers.filter((x) => x.id !== h.id);
         render();
         setDirty(true);
     });
@@ -144,17 +283,56 @@ function renderRow(h) {
     return node;
 }
 
-els.urlFilter.addEventListener("input", () => {
-    config.urlFilter = sanitize(els.urlFilter.value);
-    if (config.urlFilter !== els.urlFilter.value) {
-        els.urlFilter.value = config.urlFilter;
-    }
+function bindSanitizedInput(input, apply) {
+    input.addEventListener("input", () => {
+        const clean = sanitize(input.value);
+        if (clean !== input.value) {
+            const pos = input.selectionStart - (input.value.length - clean.length);
+            input.value = clean;
+            input.setSelectionRange(pos, pos);
+        }
+        apply(clean);
+        setDirty(true);
+    });
+}
+
+els.profileSelect.addEventListener("change", () => {
+    config.activeProfileId = els.profileSelect.value;
+    render();
     setDirty(true);
 });
 
+bindSanitizedInput(els.profileName, (clean) => {
+    activeProfile().name = clean;
+    const opt = els.profileSelect.querySelector(`option[value="${config.activeProfileId}"]`);
+    if (opt) opt.textContent = profileLabel(clean);
+});
+
+els.addProfile.addEventListener("click", () => {
+    const p = defaultProfile(uniqueProfileName(`Profile ${config.profiles.length + 1}`));
+    config.profiles.push(p);
+    config.activeProfileId = p.id;
+    render();
+    setDirty(true);
+    els.profileName.focus();
+    els.profileName.select();
+});
+
+els.deleteProfile.addEventListener("click", () => {
+    if (config.profiles.length <= 1) return;
+    config.profiles = config.profiles.filter((p) => p.id !== config.activeProfileId);
+    config.activeProfileId = config.profiles[0].id;
+    render();
+    setDirty(true);
+});
+
+bindSanitizedInput(els.urlFilter, (clean) => {
+    activeProfile().urlFilter = clean;
+});
+
 els.add.addEventListener("click", () => {
-    config.headers.push({
-        id: genId(),
+    activeProfile().headers.push({
+        id: genId("h"),
         enabled: true,
         name: "",
         value: "",
@@ -165,12 +343,15 @@ els.add.addEventListener("click", () => {
 
 function exportConfig() {
     const data = {
-        version: 1,
-        urlFilter: config.urlFilter || "",
-        headers: config.headers.map((h) => ({
-            enabled: h.enabled !== false,
-            name: h.name,
-            value: h.value,
+        version: 2,
+        profiles: config.profiles.map((p) => ({
+            name: p.name,
+            urlFilter: p.urlFilter || "",
+            headers: p.headers.map((h) => ({
+                enabled: h.enabled !== false,
+                name: h.name,
+                value: h.value,
+            })),
         })),
     };
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -182,6 +363,18 @@ function exportConfig() {
     a.download = "http-header-injector-config.json";
     a.click();
     URL.revokeObjectURL(url);
+}
+
+function importHeaders(arr) {
+    const headers = Array.isArray(arr) ? arr : [];
+    return headers
+        .map((h) => ({
+            id: genId("h"),
+            enabled: !(h && h.enabled === false),
+            name: sanitize(String(h?.name ?? "")),
+            value: sanitize(String(h?.value ?? "")),
+        }))
+        .filter((h) => h.name.trim() !== "");
 }
 
 function importConfig(file) {
@@ -196,18 +389,29 @@ function importConfig(file) {
             els.status.textContent = "Import failed: invalid JSON";
             return;
         }
-        const headers = Array.isArray(data?.headers) ? data.headers : [];
-        config = {
-            urlFilter: sanitize(String(data?.urlFilter ?? "")),
-            headers: headers
-                .map((h) => ({
-                    id: genId(),
-                    enabled: !(h && h.enabled === false),
-                    name: sanitize(String(h?.name ?? "")),
-                    value: sanitize(String(h?.value ?? "")),
-                }))
-                .filter((h) => h.name.trim() !== ""),
-        };
+
+        let profiles;
+        if (Array.isArray(data?.profiles)) {
+            profiles = data.profiles.map((p, i) => ({
+                id: genId("p"),
+                name: sanitize(String(p?.name ?? `Profile ${i + 1}`)),
+                urlFilter: sanitize(String(p?.urlFilter ?? "")),
+                headers: importHeaders(p?.headers),
+            }));
+        } else {
+            profiles = [
+                {
+                    id: genId("p"),
+                    name: "Default",
+                    urlFilter: sanitize(String(data?.urlFilter ?? "")),
+                    headers: importHeaders(data?.headers),
+                },
+            ];
+        }
+        if (profiles.length === 0) profiles = [defaultProfile()];
+        dedupeProfileNames(profiles);
+
+        config = { activeProfileId: profiles[0].id, profiles };
         render();
         setDirty(true);
     };

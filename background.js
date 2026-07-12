@@ -22,14 +22,23 @@ async function loadConfig() {
     return data[STORAGE_KEY] || { urlFilter: "", headers: [] };
 }
 
+function activeProfile(config) {
+    const profiles = Array.isArray(config?.profiles) ? config.profiles : null;
+    if (profiles && profiles.length > 0) {
+        return profiles.find((p) => p.id === config.activeProfileId) || profiles[0];
+    }
+    return { urlFilter: config?.urlFilter || "", headers: config?.headers || [] };
+}
+
 function sanitize(str) {
     return String(str ?? "").replace(/[\r\n\x00]/g, "");
 }
 
 function buildRules(config) {
+    const profile = activeProfile(config);
     const seen = new Set();
     const requestHeaders = [];
-    for (const h of config.headers || []) {
+    for (const h of profile.headers || []) {
         if (!h.enabled || !h.name || h.name.trim() === "") continue;
         const name = sanitize(h.name);
         const key = name.trim().toLowerCase();
@@ -45,7 +54,7 @@ function buildRules(config) {
     if (requestHeaders.length === 0) return [];
 
     const condition = { resourceTypes: RESOURCE_TYPES };
-    const urlFilter = sanitize(config.urlFilter).trim();
+    const urlFilter = sanitize(profile.urlFilter).trim();
     if (urlFilter !== "") {
         condition.urlFilter = urlFilter;
     }

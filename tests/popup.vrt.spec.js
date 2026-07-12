@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { openPopup, configWith } = require("./helpers");
+const { openPopup, configWith, profilesWith } = require("./helpers");
 
 async function snap(page, name) {
     await page.locator("#status").waitFor();
@@ -40,5 +40,23 @@ test.describe("popup VRT", () => {
             storage: configWith([{ name: "", value: "orphan" }]),
         });
         await snap(page, "invalid.png");
+    });
+
+    test("複数プロファイル", async ({ page }) => {
+        await openPopup(page, {
+            storage: profilesWith([
+                {
+                    name: "prd",
+                    urlFilter: "prd.example.com",
+                    headers: [{ name: "X-Env", value: "prd" }],
+                },
+                {
+                    name: "stg",
+                    urlFilter: "stg.example.com",
+                    headers: [{ name: "X-Env", value: "stg" }],
+                },
+            ]),
+        });
+        await snap(page, "profiles.png");
     });
 });

@@ -8,7 +8,7 @@
         </title>
         <meta
             name="description"
-            content="A free, open-source Chrome extension for adding custom HTTP request headers. Per-header toggles, URL filtering, and JSON export/import. 100% local, nothing sent anywhere."
+            content="A free, open-source Chrome extension for adding custom HTTP request headers. Profiles for prd/stg/local, per-header toggles, URL filtering, and JSON export/import. 100% local, nothing sent anywhere."
         />
 
         <!-- Open Graph -->
@@ -23,7 +23,7 @@
         />
         <meta
             property="og:description"
-            content="A free, open-source Chrome extension for adding custom HTTP request headers. Per-header toggles, URL filtering, and JSON export/import. 100% local, nothing sent anywhere."
+            content="A free, open-source Chrome extension for adding custom HTTP request headers. Profiles for prd/stg/local, per-header toggles, URL filtering, and JSON export/import. 100% local, nothing sent anywhere."
         />
         <meta
             property="og:image"
@@ -40,7 +40,7 @@
         />
         <meta
             name="twitter:description"
-            content="A free, open-source Chrome extension for adding custom HTTP request headers. Per-header toggles, URL filtering, and JSON export/import."
+            content="A free, open-source Chrome extension for adding custom HTTP request headers. Profiles, per-header toggles, URL filtering, and JSON export/import."
         />
         <meta
             name="twitter:image"
@@ -519,6 +519,27 @@
                 background: var(--bg-content);
                 padding: 30px 26px;
             }
+            .feature-highlight {
+                position: relative;
+                background: linear-gradient(
+                    180deg,
+                    #fff6f4 0%,
+                    var(--bg-content) 60%
+                );
+            }
+            .feature-badge {
+                position: absolute;
+                top: 18px;
+                right: 18px;
+                font-family: var(--font-mono);
+                font-size: 11px;
+                font-weight: 600;
+                letter-spacing: 0.05em;
+                color: #fff;
+                background: var(--btn);
+                padding: 3px 9px;
+                border-radius: 100px;
+            }
             .feature .ico {
                 width: 42px;
                 height: 42px;
@@ -901,9 +922,9 @@
                         <p class="lead">
                             ModHeader disappeared from the Chrome Web Store.
                             HTTP Header Injector covers the essentials
-                            per-header toggles, URL filtering, JSON
-                            export/import and deliberately stays out of your way
-                            otherwise.
+                            profiles for prd/stg/local, per-header toggles, URL
+                            filtering, JSON export/import and deliberately stays
+                            out of your way otherwise.
                         </p>
                         <div class="hero-ctas">
                             <a
@@ -1091,6 +1112,43 @@
                     </div>
 
                     <div class="feature-grid">
+                        <div class="feature feature-highlight">
+                            <span class="feature-badge">NEW</span>
+                            <div class="ico">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <rect
+                                        x="3"
+                                        y="4"
+                                        width="18"
+                                        height="6"
+                                        rx="1.5"
+                                        stroke="#F14E32"
+                                        stroke-width="1.8"
+                                    />
+                                    <rect
+                                        x="3"
+                                        y="14"
+                                        width="18"
+                                        height="6"
+                                        rx="1.5"
+                                        stroke="#0388A6"
+                                        stroke-width="1.8"
+                                    />
+                                    <path
+                                        d="M7 7h.01M7 17h.01"
+                                        stroke="#F14E32"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                    />
+                                </svg>
+                            </div>
+                            <h3>Profiles (prd / stg / local)</h3>
+                            <p>
+                                Keep a separate header set per environment or
+                                app, then switch the active profile in one click.
+                                Just like ModHeader's profiles.
+                            </p>
+                        </div>
                         <div class="feature">
                             <div class="ico">
                                 <svg viewBox="0 0 24 24" fill="none">
@@ -1261,9 +1319,10 @@
                         <span class="kicker">IMPORT / EXPORT</span>
                         <h2>Your setup, as portable JSON</h2>
                         <p>
-                            Headers, values, and the URL filter all export to a
-                            single JSON file. The same format the popup imports
-                            back in.
+                            Every profile - its headers, values, and URL filter
+                            - exports to a single JSON file. The same format the
+                            popup imports back in, so you can share a whole
+                            prd/stg/local setup with a teammate.
                         </p>
                         <ul>
                             <li>

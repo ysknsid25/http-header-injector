@@ -28,18 +28,44 @@ async function openPopup(page, { storage = {} } = {}) {
     await page.waitForFunction(() => window.chrome && window.__chromeStore);
 }
 
+function seedHeaders(headers, prefix = "h_seed") {
+    return headers.map((h, i) => ({
+        id: `${prefix}_${i}`,
+        enabled: h.enabled !== false,
+        name: h.name,
+        value: h.value ?? "",
+    }));
+}
+
 function configWith(headers, urlFilter = "") {
     return {
         config: {
-            urlFilter,
-            headers: headers.map((h, i) => ({
-                id: `h_seed_${i}`,
-                enabled: h.enabled !== false,
-                name: h.name,
-                value: h.value ?? "",
-            })),
+            activeProfileId: "p_seed",
+            profiles: [
+                {
+                    id: "p_seed",
+                    name: "Default",
+                    urlFilter,
+                    headers: seedHeaders(headers),
+                },
+            ],
         },
     };
 }
 
-module.exports = { POPUP_URL, openPopup, configWith };
+function profilesWith(profiles, activeIndex = 0) {
+    const built = profiles.map((p, i) => ({
+        id: `p_seed_${i}`,
+        name: p.name,
+        urlFilter: p.urlFilter ?? "",
+        headers: seedHeaders(p.headers ?? [], `h_seed_${i}`),
+    }));
+    return {
+        config: {
+            activeProfileId: built[activeIndex].id,
+            profiles: built,
+        },
+    };
+}
+
+module.exports = { POPUP_URL, openPopup, configWith, profilesWith };
