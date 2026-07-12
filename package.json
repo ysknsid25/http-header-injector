@@ -7,9 +7,11 @@
         "test": "playwright test",
         "test:update": "playwright test --update-snapshots",
         "test:ui": "playwright test --ui",
+        "test:ci": "playwright test --grep-invert VRT",
         "lint": "biome lint .",
         "format": "biome format --write .",
-        "check": "biome check --write ."
+        "check": "biome check --write .",
+        "ci:check": "biome ci ."
     },
     "devDependencies": {
         "@biomejs/biome": "2.5.3",
