@@ -1,264 +1,275 @@
 :root {
-  --background: #f0efe7;
-  --bg-content: #ffffff;
-  --bg-sidebar: #f7f7f3;
-  --bg-light: #e9e8e0;
-  --text: #4e443c;
-  --text-light: #777;
-  --text-header: #f14e32;
-  --link: #0388a6;
-  --border: #efeee6;
-  --btn: #f14e32;
-  --btn-hover: #ee3c1e;
-  --highlight: #ffe566;
-  --font-base: "Roboto Slab", serif;
-  --font-mono: "Courier", monospace;
+    --background: #f0efe7;
+    --bg-content: #ffffff;
+    --bg-sidebar: #f7f7f3;
+    --bg-light: #e9e8e0;
+    --text: #4e443c;
+    --text-light: #777;
+    --text-header: #f14e32;
+    --link: #0388a6;
+    --border: #efeee6;
+    --btn: #f14e32;
+    --btn-hover: #ee3c1e;
+    --highlight: #ffe566;
+    --font-base: "Roboto Slab", serif;
+    --font-mono: "Courier", monospace;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  width: 460px;
-  font-family: var(--font-base);
-  color: var(--text);
-  background: var(--background);
-  font-size: 13px;
+    margin: 0;
+    width: 460px;
+    font-family: var(--font-base);
+    color: var(--text);
+    background: var(--background);
+    font-size: 13px;
 }
 
 .app-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  background: var(--bg-content);
-  border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--bg-content);
+    border-bottom: 1px solid var(--border);
 }
 
 .app-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .app-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: var(--text-header);
-  color: #fff;
-  font-weight: bold;
-  font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: var(--text-header);
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .app-title h1 {
-  margin: 0;
-  font-size: 15px;
-  color: var(--text-header);
-  font-weight: 700;
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-header);
+    font-weight: 700;
 }
 
 .url-filter {
-  padding: 12px 16px;
-  background: var(--bg-sidebar);
-  border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    background: var(--bg-sidebar);
+    border-bottom: 1px solid var(--border);
 }
 .url-filter label {
-  display: block;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 4px;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
 }
 .url-filter input {
-  width: 100%;
-  padding: 7px 9px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg-content);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 12px;
+    width: 100%;
+    padding: 7px 9px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg-content);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
 }
 .hint {
-  margin: 6px 0 0;
-  font-size: 11px;
-  color: var(--text-light);
+    margin: 6px 0 0;
+    font-size: 11px;
+    color: var(--text-light);
 }
 
 .headers {
-  padding: 12px 16px 16px;
+    padding: 12px 16px 16px;
 }
 .headers-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
 }
 .headers-head h2 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 700;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
 }
 .head-actions {
-  display: flex;
-  gap: 6px;
-}
-.head-actions .btn-ghost {
-  padding: 5px 10px;
+    display: flex;
+    gap: 6px;
 }
 
 .header-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .header-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.15fr) auto;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  background: var(--bg-content);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(0, 1.15fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: var(--bg-content);
+    border: 1px solid var(--border);
+    border-radius: 8px;
 }
 .header-row.disabled {
-  opacity: 0.5;
+    opacity: 0.5;
 }
 .header-row.duplicate {
-  border-color: var(--text-header);
-  box-shadow: 0 0 0 1px var(--text-header);
+    border-color: var(--text-header);
+    box-shadow: 0 0 0 1px var(--text-header);
 }
 .header-row.invalid .row-name {
-  border-color: var(--text-header);
-  background: #fff6f4;
+    border-color: var(--text-header);
+    background: #fff6f4;
 }
 
 .header-row input[type="text"] {
-  padding: 7px 8px;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background: var(--bg-content);
-  color: var(--text);
-  font-size: 12px;
-  font-family: var(--font-mono);
-  min-width: 0;
+    padding: 7px 8px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--bg-content);
+    color: var(--text);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    min-width: 0;
 }
 
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 .row-toggle {
-  position: relative;
-  display: inline-flex;
-  cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    cursor: pointer;
 }
 .row-toggle input {
-  position: absolute;
-  opacity: 0;
-  inset: 0;
-  cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
 }
 .row-toggle .check {
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--text-light);
-  border-radius: 4px;
-  background: var(--bg-content);
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--text-light);
+    border-radius: 4px;
+    background: var(--bg-content);
 }
 .row-toggle input:checked + .check {
-  background: var(--btn);
-  border-color: var(--btn);
+    background: var(--btn);
+    border-color: var(--btn);
 }
 .row-toggle input:checked + .check::after {
-  content: "✓";
-  position: absolute;
-  left: 3px;
-  top: -1px;
-  color: #fff;
-  font-size: 13px;
+    content: "✓";
+    position: absolute;
+    left: 3px;
+    top: -1px;
+    color: #fff;
+    font-size: 13px;
 }
 
 .btn {
-  border: none;
-  border-radius: 6px;
-  padding: 7px 16px;
-  font-family: var(--font-base);
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-family: var(--font-base);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
 }
 .btn-primary {
-  background: var(--btn);
-  color: #fff;
+    background: var(--btn);
+    color: #fff;
 }
 .btn-primary:hover {
-  background: var(--btn-hover);
+    background: var(--btn-hover);
 }
 .btn-primary:disabled {
-  background: var(--bg-light);
-  color: var(--text-light);
-  cursor: default;
+    background: var(--bg-light);
+    color: var(--text-light);
+    cursor: default;
 }
 .btn-ghost {
-  background: transparent;
-  color: var(--text-header);
-  border: 1px solid var(--border);
-  padding: 6px 12px;
+    background: transparent;
+    color: var(--text-header);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
 }
 .btn-ghost:hover {
-  background: var(--bg-light);
+    background: var(--bg-light);
+}
+.head-actions .btn-ghost {
+    padding: 5px 10px;
 }
 .btn-icon {
-  border: none;
-  background: transparent;
-  color: var(--text-light);
-  font-size: 14px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
 }
 .btn-icon:hover {
-  color: var(--text-header);
-  background: var(--bg-light);
+    color: var(--text-header);
+    background: var(--bg-light);
 }
 
 .empty-state {
-  margin: 8px 0 0;
-  padding: 16px;
-  text-align: center;
-  color: var(--text-light);
-  font-size: 12px;
-  background: var(--bg-content);
-  border: 1px dashed var(--border);
-  border-radius: 8px;
+    margin: 8px 0 0;
+    padding: 16px;
+    text-align: center;
+    color: var(--text-light);
+    font-size: 12px;
+    background: var(--bg-content);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
 }
 .empty-state.hidden {
-  display: none;
+    display: none;
 }
 
 .app-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  background: var(--bg-content);
-  border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--bg-content);
+    border-top: 1px solid var(--border);
 }
 .status {
-  font-size: 11px;
-  color: var(--text-light);
+    font-size: 11px;
+    color: var(--text-light);
 }
 .status.dirty {
-  color: var(--text-header);
-  font-weight: 700;
+    color: var(--text-header);
+    font-weight: 700;
 }
 .status.saved {
-  color: var(--link);
+    color: var(--link);
 }
 .status.error {
-  color: var(--text-header);
-  font-weight: 700;
+    color: var(--text-header);
+    font-weight: 700;
 }

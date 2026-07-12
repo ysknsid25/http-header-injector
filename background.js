@@ -70,10 +70,7 @@ async function syncRules() {
             removeRuleIds,
             addRules,
         });
-        const count = addRules.reduce(
-            (n, r) => n + (r.action.requestHeaders?.length || 0),
-            0
-        );
+        const count = addRules.reduce((n, r) => n + (r.action.requestHeaders?.length || 0), 0);
         await chrome.action.setBadgeBackgroundColor({ color: "#F14E32" });
         await chrome.action.setBadgeText({ text: count > 0 ? String(count) : "" });
     } catch (err) {

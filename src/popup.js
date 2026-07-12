@@ -6,7 +6,7 @@ const defaultConfig = () => ({
 });
 
 function genId() {
-    return "h_" + Math.random().toString(36).slice(2, 9);
+    return `h_${Math.random().toString(36).slice(2, 9)}`;
 }
 
 function sanitize(str) {
@@ -70,9 +70,7 @@ function update() {
         els.save.disabled = true;
         els.status.className = "status error";
         els.status.textContent =
-            duplicates.size > 0
-                ? "Duplicate header name"
-                : "Header name is required";
+            duplicates.size > 0 ? "Duplicate header name" : "Header name is required";
         return;
     }
 
@@ -96,7 +94,9 @@ async function save() {
 function render() {
     els.urlFilter.value = config.urlFilter || "";
     els.list.innerHTML = "";
-    config.headers.forEach((h) => els.list.appendChild(renderRow(h)));
+    for (const h of config.headers) {
+        els.list.appendChild(renderRow(h));
+    }
     els.empty.classList.toggle("hidden", config.headers.length > 0);
 }
 
@@ -196,15 +196,15 @@ function importConfig(file) {
             els.status.textContent = "Import failed: invalid JSON";
             return;
         }
-        const headers = Array.isArray(data && data.headers) ? data.headers : [];
+        const headers = Array.isArray(data?.headers) ? data.headers : [];
         config = {
-            urlFilter: sanitize(String((data && data.urlFilter) ?? "")),
+            urlFilter: sanitize(String(data?.urlFilter ?? "")),
             headers: headers
                 .map((h) => ({
                     id: genId(),
                     enabled: !(h && h.enabled === false),
-                    name: sanitize(String((h && h.name) ?? "")),
-                    value: sanitize(String((h && h.value) ?? "")),
+                    name: sanitize(String(h?.name ?? "")),
+                    value: sanitize(String(h?.value ?? "")),
                 }))
                 .filter((h) => h.name.trim() !== ""),
         };
